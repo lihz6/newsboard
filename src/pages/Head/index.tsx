@@ -1,41 +1,93 @@
-/**
- * ```
- * 李鸿章 <poodll@163.com>
- * 7/2/2019, 11:09:49 AM
- * ```
- * doc comment for the file goes here
- */
+import React, { useContext } from 'react';
 
-/** Happy Coding */
-import React, { useState, useEffect } from 'react';
-import { RouteComponentProps } from 'react-router-dom';
+import { Layout, Menu, Avatar, Button } from 'antd';
+import {
+  RedditOutlined,
+  HomeOutlined,
+  MailOutlined,
+  VideoCameraAddOutlined,
+  NotificationOutlined,
+  UserOutlined,
+  LogoutOutlined,
+} from '@ant-design/icons';
+import { context, AppStatus } from '_base/Context';
 
-import { Layout } from 'antd';
-import withPath from '_base/withPath';
-//import Component from '_view/Component';
-
-import { getData } from './fetch';
-
-export default withPath(
-  '/x000/head',
-  {}
-)(function Head({ history, match: { params } }) {
-  const loading = true;
-
-  useEffect(() => {
-    document.title = 'Title';
-  }, []);
-
+export default function Head() {
+  const { setContextState } = useContext(context);
   return (
     <Layout.Header
       className="-glob-box-shadow"
       style={{
-        height: '85px',
         display: 'flex',
         padding: '0',
         backgroundColor: 'white',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        position: 'relative',
+        zIndex: 1,
       }}>
-      Header
+      <div
+        style={{
+          display: 'flex',
+        }}>
+        <div
+          style={{
+            width: '128px',
+            background: '#1890ff',
+            color: 'white',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <RedditOutlined
+            style={{
+              fontSize: 'xx-large',
+            }}
+          />
+        </div>
+        <Menu
+          mode="horizontal"
+          defaultSelectedKeys={['news']}
+          style={{
+            lineHeight: '64px',
+          }}>
+          <Menu.Item key="home" disabled>
+            <HomeOutlined />
+            Home
+          </Menu.Item>
+          <Menu.Item key="news">
+            <MailOutlined />
+            News
+          </Menu.Item>
+          <Menu.Item key="video" disabled>
+            <VideoCameraAddOutlined />
+            Video
+          </Menu.Item>
+          <Menu.Item key="mail" disabled>
+            <NotificationOutlined />
+            Events
+          </Menu.Item>
+        </Menu>
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+        }}>
+        <Avatar icon={<UserOutlined />} />
+        <Button
+          icon={<LogoutOutlined />}
+          onClick={() => {
+            setContextState({ appStatus: AppStatus.UNKNOWN });
+          }}
+          size="small"
+          type="dashed"
+          style={{
+            margin: '0 16px',
+          }}>
+          退出
+        </Button>
+      </div>
     </Layout.Header>
   );
-});
+}

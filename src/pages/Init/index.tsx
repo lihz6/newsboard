@@ -1,8 +1,3 @@
-/**
- * 李鸿章 <poodll@163.com>
- * 6/27/2019, 3:38:42 PM
- */
-
 import React from 'react';
 import { Spin } from 'antd';
 

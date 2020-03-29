@@ -1,0 +1,35 @@
+@import '~_sass/vars';
+
+// $color: theme color:
+// $color-{white,black}-{1..9}0: lighten or darken
+// $color-font-head: heading color
+// $color-font: text main color
+// $color-font-gray: text secondary color
+// $color-border: border color
+// $color-background: background color
+// $color-{fail,okay,warn,info,dead}: status colors
+// `box-shadow`: $box-shadow
+
+.news-item {
+  &-main {
+    padding: 8px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+  }
+
+  &-photo {
+    width: 64px;
+    height: 64px;
+    background-color: #1890ff;
+    line-height: 64px;
+    font-size: x-large;
+    margin-right: 16px;
+    text-align: center;
+    color: white;
+  }
+
+  &-content {
+    flex: auto;
+  }
+}

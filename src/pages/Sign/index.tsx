@@ -1,64 +1,42 @@
-/**
- * ```
- * 李鸿章 <poodll@163.com>
- * 6/27/2019, 3:57:15 PM
- * ```
- * doc comment of the file goes here
- */
-
-/** Happy Coding */
 import React, { useState, useEffect, useContext } from 'react';
 
-import { Form, Icon, Input, Button, Checkbox, message } from 'antd';
-import { FormComponentProps, FormProps } from 'antd/lib/form';
+import { Form, Input, Button, message } from 'antd';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
+
+import { FormProps } from 'antd/lib/form';
 import { context } from '_base/Context';
-// import Component from '_view/Component';
 
-import { signin, forgetPword } from './fetch';
-
-function Sign({
-  form: { getFieldDecorator, validateFields },
-}: FormComponentProps) {
+import { signin } from '_fetch';
+import coverImage from '_asset/images/th.jpeg';
+export default function Sign() {
   const [logging, setLogging] = useState(false);
   const { setContextState } = useContext(context);
+  const [form] = Form.useForm();
   useEffect(() => {
     document.title = '请登录';
   }, []);
 
-  const handleSubmit: FormProps['onSubmit'] = e => {
-    e.preventDefault();
-    validateFields((err, values) => {
-      if (!err) {
-        setLogging(true);
-        signin(values)
-          .then(data => {
-            setContextState(data);
-            setLogging(false);
-          })
-          .catch(err => {
-            message.error(err);
-            setLogging(false);
-          });
-      } else {
-        console.error(err);
-      }
-    });
+  const handleSubmit: FormProps['onFinish'] = values => {
+    setLogging(true);
+    signin(values as any)
+      .then(data => {
+        setContextState(data);
+        setLogging(false);
+      })
+      .catch(err => {
+        message.error(err);
+        setLogging(false);
+      });
   };
-  const handleForgetPword = () => {
-    validateFields(['username'], (err, values) => {
-      if (!err) {
-        forgetPword(values)
-          .then(msg => {
-            message.success(msg);
-          })
-          .catch(err => {
-            message.error(err);
-          });
-      } else {
-        console.error(err);
-      }
-    });
-  };
+  // const handleForgetPword = () => {
+  //   forgetPword(form.getFieldValue('username'))
+  //     .then(msg => {
+  //       message.success(msg);
+  //     })
+  //     .catch(err => {
+  //       message.error(err);
+  //     });
+  // };
   return (
     <div
       style={{
@@ -67,54 +45,58 @@ function Sign({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        backgroundImage: `url(${coverImage})`,
       }}>
       <Form
         className="-glob-box-shadow"
-        onSubmit={handleSubmit}
+        initialValues={{ remember: true }}
+        onFinish={handleSubmit}
+        form={form}
         style={{
           backgroundColor: 'white',
           minWidth: '320px',
           padding: '48px 32px',
         }}>
-        <Form.Item>
-          {getFieldDecorator('username', {
-            rules: [{ required: true, message: '请输入电子邮箱' }],
-          })(
-            <Input
-              name="username"
-              prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-              placeholder="电子邮箱"
-            />
-          )}
+        <div
+          style={{
+            fontSize: '1.62em',
+            textAlign: 'center',
+            marginBottom: '32px',
+          }}>
+          · WELCOME ·
+        </div>
+        <Form.Item
+          name="username"
+          rules={[{ required: true, message: '请输入用户' }]}>
+          <Input
+            name="username"
+            prefix={<UserOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
+            placeholder="用户"
+          />
+        </Form.Item>
+        <Form.Item
+          name="password"
+          rules={[
+            {
+              required: true,
+              message: '请输入密码',
+            },
+          ]}>
+          <Input.Password
+            prefix={<LockOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
+            name="password"
+            placeholder="密码"
+          />
         </Form.Item>
         <Form.Item>
-          {getFieldDecorator('password', {
-            rules: [
-              {
-                required: true,
-                message: '请输入密码（不少于 8 位）',
-                min: 8,
-              },
-            ],
-          })(
-            <Input
-              prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-              type="password"
-              name="password"
-              placeholder="密码"
-            />
-          )}
-        </Form.Item>
-        <Form.Item>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            {getFieldDecorator('remember', {
-              valuePropName: 'checked',
-              initialValue: true,
-            })(<Checkbox>记住登录</Checkbox>)}
-            <a className="login-form-forgot" onClick={handleForgetPword}>
+          {/* <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Form.Item name="remember" valuePropName="checked">
+              <Checkbox>记住登录</Checkbox>
+            </Form.Item>
+            <Button type="link" onClick={handleForgetPword}>
               忘记密码
-            </a>
-          </div>
+            </Button>
+          </div> */}
           <Button
             type="primary"
             htmlType="submit"
@@ -122,11 +104,8 @@ function Sign({
             style={{ width: '100%' }}>
             登录
           </Button>
-          {/* <Icon type="login" /> <a href="">现在注册</a> */}
         </Form.Item>
       </Form>
     </div>
   );
 }
-
-export default Form.create()(Sign);

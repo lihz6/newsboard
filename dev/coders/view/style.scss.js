@@ -1,17 +1,23 @@
 const { kebabCase } = require('lodash');
-const { headers, comment } = require('..');
+const { comment } = require('..');
 const path = require('path');
-const file = path.join(__dirname, '../../../src/_sass/_vars.scss');
+const fs = require('fs');
+
+function varsComment() {
+  const file = path.join(process.cwd(), 'src', '_sass', '_vars.scss');
+  if (fs.existsSync(file)) {
+    return ['', ...comment(file), ''];
+  }
+  return [''];
+}
+
 module.exports = function(name) {
   return [
-    ...headers(),
     `@import '~_sass/vars';`,
-    ``,
-    ...comment(file),
-    ``,
+    ...varsComment(),
     `.${kebabCase(name)} {`,
     `  &-main {`,
-    `    padding: 8px;`,
+    `    // padding: 8px;`,
     `  }`,
     `}`,
     ``,

@@ -1,22 +1,3 @@
-const {
-  REACT_APP_CODER = 'REACT_APP_CODER',
-  REACT_APP_EMAIL = 'REACT_APP_EMAIL',
-} = require('dotenv').config({
-  path: '.env.local',
-}).parsed;
-
-exports.headers = () => [
-  `/**`,
-  ` * \`\`\``,
-  ` * ${REACT_APP_CODER} <${REACT_APP_EMAIL}>`,
-  ` * ${new Date().toLocaleString('en-US', { timeZone: 'Asia/Shanghai' })}`,
-  ` * \`\`\``,
-  ` * doc comment for the file goes here`,
-  ` */`,
-  ``,
-  `/** Happy Coding */`,
-];
-
 exports.comment = file => {
   const fs = require('fs');
   const text = fs.readFileSync(file, {

@@ -17,3 +17,18 @@ code {
 .ant-form-item:last-child {
   margin-bottom: 0;
 }
+
+.ant-form-item {
+  margin-bottom: 16px;
+}
+
+.ck-content {
+  min-height: 560px;
+}
+
+.-glob-content {
+  align-items: center;
+  & > * {
+    min-width: 960px;
+  }
+}

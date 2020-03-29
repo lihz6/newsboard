@@ -1,22 +1,16 @@
-/**
- * ```
- * 李鸿章 <poodll@163.com>
- * 7/1/2019, 4:13:34 PM
- * ```
- * doc comment for the file goes here
- */
-
-/** Happy Coding */
 import React, { createContext, PureComponent, ReactNode } from 'react';
-import { getContext } from './fetch';
-export enum Userflag {
+export enum AppStatus {
   LOADING = -1,
   UNKNOWN = 0,
   LOGINED = 1,
 }
 
 export interface Fetch {
-  userflag: Userflag;
+  appStatus: AppStatus;
+  headers: {
+    'X-Admin-Token': string | null;
+    'X-Admin-Id': string | null;
+  };
   // userName: string;
   // username: string;
   // avatar: string;
@@ -28,7 +22,11 @@ interface Model extends Fetch {
 }
 const defaultContextModel: Model = {
   // popupView: null,
-  userflag: Userflag.LOADING,
+  appStatus: AppStatus[REACT_APP_APP_STATUS],
+  headers: {
+    'X-Admin-Token': null,
+    'X-Admin-Id': null,
+  },
   // userName: '',
   // username: '',
   // avatar: '',
@@ -57,15 +55,7 @@ export default class Context extends PureComponent<Props, ContextState> {
       ...defaultContextModel,
     };
   }
-  componentDidMount() {
-    getContext()
-      .then(data => {
-        this.setState(data);
-      })
-      .catch(() => {
-        this.setState({ userflag: Userflag.UNKNOWN });
-      });
-  }
+
   render() {
     const { children } = this.props;
     return <Provider value={this.state}>{children(this.state)}</Provider>;

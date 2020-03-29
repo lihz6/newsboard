@@ -20,7 +20,7 @@ export function toFormData(data: any) {
 
 function formdata(data: any, headers: any) {
   const options: any = {
-    credentials: 'include',
+    // credentials: 'include',
     method: 'GET',
     mode: 'cors',
   };

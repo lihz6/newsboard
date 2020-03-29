@@ -1,36 +1,43 @@
 import React from 'react';
 import {
-  BrowserRouter as Router,
-  // Router,
+  // BrowserRouter as Router,
+  Router,
   Switch,
   Route,
   Redirect,
 } from 'react-router-dom';
-// import { createHashHistory } from 'history';
+import { createHashHistory } from 'history';
 
 import { Layout } from 'antd';
-import { ContextState, Userflag } from '_base/Context';
+import { ContextState, AppStatus } from '_base/Context';
 import Init from './Init';
 import Sign from './Sign';
 import Head from './Head';
-import Demo from './Demo';
+import List from './List';
+import Edit from './Edit';
 
-export default function renderRouter({ userflag }: ContextState) {
-  switch (userflag) {
-    case Userflag.LOADING:
+export default function renderRouter({ appStatus }: ContextState) {
+  switch (appStatus) {
+    case AppStatus.LOADING:
       return <Init />;
-    case Userflag.UNKNOWN:
+    case AppStatus.UNKNOWN:
       return <Sign />;
     default:
       return (
-        // <Router history={createHashHistory()}>
-        <Router basename={ROUTER_BASENAME}>
-          <Layout>
+        // <Router basename={ROUTER_BASENAME}>
+        <Router history={createHashHistory()}>
+          <Layout
+            style={{
+              height: '100vh',
+            }}>
             <Route component={Head} />
-            <Switch>
-              <Route path={Demo.path} component={Demo} />
-              <Redirect to={Demo.pathOf({ page: 12 })} />
-            </Switch>
+            <Layout className="-glob-content">
+              <Switch>
+                <Route path={List.path} component={List} />
+                <Route path={Edit.path} component={Edit} />
+                <Redirect to={List.pathOf({ page: 1 })} />
+              </Switch>
+            </Layout>
           </Layout>
         </Router>
       );

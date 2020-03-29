@@ -1,8 +1,3 @@
-/**
- * 李鸿章 <poodll@163.com>
- * 6/27/2019, 10:44:53 AM
- */
-
 @import '~_sass/vars';
 
 // $color: theme color:
@@ -15,8 +10,9 @@
 // $color-{fail,okay,warn,info,dead}: status colors
 // `box-shadow`: $box-shadow
 
-.menu-view {
-  &-main {
-    padding: 8px;
+.ux-editable-tags {
+  &-plus {
+    background: white;
+    border-style: dashed;
   }
 }

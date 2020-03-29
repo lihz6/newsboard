@@ -1,4 +1,4 @@
-export default <T>(data: T, ms = 2000): Promise<T> =>
+export default <T>(data: T, ms = 200): Promise<T> =>
   new Promise(resolve => {
     setTimeout(() => {
       resolve(data);
