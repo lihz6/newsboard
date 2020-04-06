@@ -1,5 +1,12 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+/out/
+
 # dependencies
 /node_modules
 .vscode/
@@ -22,3 +29,13 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+### Vim ###
+*.swp
+
+### Pid ###
+*.pid
+
+### Log ###
+nohup.out
+*.log

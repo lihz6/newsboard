@@ -1,0 +1,51 @@
+# gitlab-ci configuration
+
+variables:
+  WORKSPACE: "/opt/workspace"           # 项目路径
+  OPENRESTY: "/opt/docker/openresty/html"   # OPENRESTY
+
+stages:
+  - info        # 信息摘要
+  - build       # 构建项目
+  - deploy      # 部署项目
+
+run_info_for_master:
+  stage: info
+  only:
+    - master
+  tags:
+    - macmini-runner
+  script:
+    - id
+    - pwd
+    - gitlab-runner --version
+    - echo $CI_PROJECT_DIR
+    - echo $CI_PROJECT_NAME
+    - echo $CI_COMMIT_REF_NAME
+
+run_build_for_master:
+  stage: build
+  only:
+    - master
+  tags:
+    - macmini-runner
+  script:
+    - rsync -rzv --delete --exclude={'.git','.gitignore','.gitlab-ci.yml','node_modules'} . $WORKSPACE/$CI_PROJECT_NAME
+    - cd $WORKSPACE/$CI_PROJECT_NAME
+    - rm -rf /tmp/$CI_PROJECT_NAME
+    - mv node_modules /tmp/$CI_PROJECT_NAME
+    - chown -R michael:michael .
+    - mv /tmp/$CI_PROJECT_NAME node_modules
+    - docker run --rm -w /data -v $WORKSPACE/$CI_PROJECT_NAME:/data node npm install
+    - docker run --rm -w /data -v $WORKSPACE/$CI_PROJECT_NAME:/data node npm run build
+
+run_deploy_for_master:
+  stage: deploy
+  only:
+    - master
+  tags:
+    - macmini-runner
+  script:
+    - rm -rf $OPENRESTY/$CI_PROJECT_NAME
+    - cp -r $WORKSPACE/$CI_PROJECT_NAME/build $OPENRESTY/$CI_PROJECT_NAME
+    - docker exec openresty nginx -s reload
